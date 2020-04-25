@@ -6,7 +6,7 @@ RUN apk update; \
     apk add zlib-dev libpng-dev;
 
 # Add couple of php modules
-RUN docker-php-ext-install mysqli gd opcache exif bcmath
+RUN docker-php-ext-install mysqli gd opcache exif bcmath zip
 
 # Add imagick php module (not available in docker-php-ext-install)
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
