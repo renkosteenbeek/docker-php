@@ -3,7 +3,7 @@ FROM php:7.4-fpm-alpine
 
 RUN apk update; \
     apk upgrade; \
-    apk add zlib-dev libpng-dev jpeg-dev libzip-dev;
+    apk add zlib-dev libpng-dev jpeg-dev libzip-dev ssmtp;
 
 # Add couple of php modules
 RUN docker-php-ext-configure gd --with-jpeg; \
@@ -17,3 +17,6 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
 # Add opcache config
 ENV OPCACHE_VALIDATE_TIMESTAMP=1
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Add Sendmail. To make it work, a valid config file must be set in /etc/ssmtp/ssmtp.conf.
+RUN echo "sendmail_path=sendmail -i -t" >> /usr/local/etc/php/conf.d/php-sendmail.ini
