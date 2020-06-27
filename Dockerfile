@@ -20,3 +20,4 @@ COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Add Sendmail. To make it work, a valid config file must be set in /etc/ssmtp/ssmtp.conf (not included).
 RUN echo "sendmail_path=sendmail -i -t" >> /usr/local/etc/php/conf.d/php-sendmail.ini
+COPY ssmtp.conf /etc/ssmtp/ssmtp.conf
