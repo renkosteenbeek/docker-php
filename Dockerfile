@@ -12,7 +12,7 @@ RUN apk add tzdata; \
 
 # Add couple of php modules
 RUN docker-php-ext-configure gd --with-jpeg; \
-    docker-php-ext-install mysqli gd opcache exif bcmath zip
+    docker-php-ext-install mysqli gd opcache exif bcmath zip calendar
 
 # Add imagick php module (not available in docker-php-ext-install)
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
