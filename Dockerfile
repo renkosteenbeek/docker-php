@@ -5,6 +5,11 @@ RUN apk update; \
     apk upgrade; \
     apk add zlib-dev libpng-dev jpeg-dev libzip-dev ssmtp;
 
+RUN apk add tzdata; \
+    cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime; \
+    echo "Europe/Amsterdam" > /etc/timezone; \
+    apk del tzdata;
+
 # Add couple of php modules
 RUN docker-php-ext-configure gd --with-jpeg; \
     docker-php-ext-install mysqli gd opcache exif bcmath zip
