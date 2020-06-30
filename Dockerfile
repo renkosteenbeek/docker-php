@@ -23,6 +23,17 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
 ENV OPCACHE_VALIDATE_TIMESTAMP=1
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
+# Add localization
+ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
+ENV MUSL_LOCPATH /usr/share/i18n/locales/musl
+RUN apk add --no-cache \
+    $MUSL_LOCALE_DEPS \
+    && wget https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip \
+    && unzip musl-locales-master.zip \
+      && cd musl-locales-master \
+      && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
+      && cd .. && rm -r musl-locales-master
+
 # Add Sendmail. To make it work, a valid config file must be set in /etc/ssmtp/ssmtp.conf (not included).
 RUN echo "sendmail_path=sendmail -i -t" >> /usr/local/etc/php/conf.d/php-sendmail.ini
 COPY ssmtp.conf /etc/ssmtp/ssmtp.conf
