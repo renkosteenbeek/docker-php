@@ -22,6 +22,7 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
 # Add opcache config
 ENV OPCACHE_VALIDATE_TIMESTAMP=1
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY default.ini /usr/local/etc/php/conf.d/default.ini
 
 # Add localization
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
