@@ -2,28 +2,38 @@ ARG PHP_VERSION=""
 ARG ARCH=
 FROM ${ARCH}php:8.3-fpm-alpine
 
-RUN apk update; \
-    apk upgrade; \
-    apk add zlib-dev libpng-dev jpeg-dev libzip-dev ssmtp;
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache \
+        zlib-dev \
+        libpng-dev \
+        jpeg-dev \
+        libzip-dev \
+        ssmtp \
+        imagemagick \
+        imagemagick-dev
 
-RUN apk add tzdata; \
-    cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime; \
-    echo "Europe/Amsterdam" > /etc/timezone; \
-    apk del tzdata;
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime && \
+    echo "Europe/Amsterdam" > /etc/timezone && \
+    apk del tzdata
 
 # Add couple of php modules
-RUN docker-php-ext-configure gd --with-jpeg; \
+RUN docker-php-ext-configure gd --with-jpeg && \
     docker-php-ext-install mysqli gd opcache exif bcmath zip calendar
 
-# Add imagick php module (not available in docker-php-ext-install)
-ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
-RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions imagick
+# Add imagick php module (using pecl with a specific version)
+RUN apk add php83-pecl-imagick --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk --update add imagemagick imagemagick-dev
 
 # Add opcache config
 ENV OPCACHE_VALIDATE_TIMESTAMP=1
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Add php config
 COPY default.ini /usr/local/etc/php/conf.d/default.ini
+COPY php-ini-development.php /usr/local/etc/php/php.ini-development
+COPY php.ini-production.php /usr/local/etc/php/php.ini-production
 
 # Add localization
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
