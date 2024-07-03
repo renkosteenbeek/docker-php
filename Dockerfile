@@ -1,6 +1,6 @@
 ARG PHP_VERSION=""
 ARG ARCH=
-FROM ${ARCH}php:7.4-fpm-alpine
+FROM ${ARCH}php:8.3-fpm-alpine
 
 RUN apk update; \
     apk upgrade; \
