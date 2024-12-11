@@ -1,6 +1,6 @@
 ARG PHP_VERSION=""
 ARG ARCH=
-FROM ${ARCH}php:7.4-fpm-alpine
+FROM ${ARCH}php:8.4-fpm-alpine
 
 RUN apk update; \
     apk upgrade; \
@@ -26,8 +26,8 @@ COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY default.ini /usr/local/etc/php/conf.d/default.ini
 
 # Add localization
-ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl
-ENV MUSL_LOCPATH /usr/share/i18n/locales/musl
+ENV MUSL_LOCALE_DEPS="cmake make musl-dev gcc gettext-dev libintl"
+ENV MUSL_LOCPATH="/usr/share/i18n/locales/musl"
 RUN apk add --no-cache \
     $MUSL_LOCALE_DEPS \
     && wget https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip \
