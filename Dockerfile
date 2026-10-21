@@ -18,7 +18,7 @@ RUN docker-php-ext-configure gd --with-jpeg; \
 # Add imagick php module (not available in docker-php-ext-install)
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions imagick
+    install-php-extensions imagick/imagick@3.8.1
 
 # Add opcache config
 ENV OPCACHE_VALIDATE_TIMESTAMP=1
